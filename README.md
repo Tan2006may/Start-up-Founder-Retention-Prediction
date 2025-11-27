@@ -11,7 +11,7 @@ https://github.com/Tan2006may/Start-up-Founder-Retention-Prediction
 
 ---
 
-## 📄 Project Overview
+##  Project Overview
 
 This project predicts whether a startup founder will be **retained (1)** or **not retained (0)**.  
 The dataset is a large, structured tabular dataset containing mixed categorical and numerical features.
@@ -51,7 +51,7 @@ The workflow involves:
 
 ---
 
-## 🧹 Preprocessing & Feature Engineering
+##  Preprocessing & Feature Engineering
 
 ### ✔ Missing Values
 - **Numerical:** median  
