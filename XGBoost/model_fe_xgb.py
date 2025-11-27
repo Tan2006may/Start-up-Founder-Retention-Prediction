@@ -319,46 +319,6 @@ def train_normal_models(X, y):
         evaluate_model(name, y_val, y_pred)
 
 
-# -------------------- PART 2: SVM + NN ON 20% SUBSET --------------------
-
-def train_svm_and_nn_20pct(X, y):
-    """
-    ALWAYS use 20% of data to train SVM and Neural Network (your rule).
-    """
-    print("\n==== Part 2: SVM & Neural Network using ONLY 20% of data ====\n")
-
-    X_small, _, y_small, _ = train_test_split(
-        X, y, test_size=0.8, stratify=y, random_state=42
-    )
-    print(f"Using subset size: {X_small.shape[0]} samples (~20% of data)\n")
-
-    X_train, X_val, y_train, y_val = train_test_split(
-        X_small, y_small, test_size=0.25, stratify=y_small, random_state=42
-    )
-
-    # SVM
-    svm_clf = SVC(kernel="rbf", C=1.5, gamma="scale", random_state=42)
-    print("--- SVM_20pct ---")
-    svm_clf.fit(X_train, y_train)
-    y_pred_svm = svm_clf.predict(X_val)
-    TRAINED_MODELS["SVM_20pct"] = svm_clf
-    evaluate_model("SVM_20pct", y_val, y_pred_svm)
-
-    # Neural Net
-    mlp = MLPClassifier(
-        hidden_layer_sizes=(128, 64),
-        activation="relu",
-        solver="adam",
-        max_iter=80,
-        random_state=42
-    )
-    print("--- NeuralNet_20pct ---")
-    mlp.fit(X_train, y_train)
-    y_pred_mlp = mlp.predict(X_val)
-    TRAINED_MODELS["NeuralNet_20pct"] = mlp
-    evaluate_model("NeuralNet_20pct", y_val, y_pred_mlp)
-
-
 # -------------------- SUMMARY + SUBMISSION --------------------
 
 def print_final_summary():
