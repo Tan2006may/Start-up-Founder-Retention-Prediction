@@ -32,17 +32,18 @@ The workflow involves:
 ---
 
 ##  Repository Structure
-├── data/ # Raw and processed data
-├── XGBoost/ # XGBoost training scripts & configs
-├── LightGBM/ # LightGBM experiments
-├── CatBoost/ # CatBoost experiments & ensemble files
-├── Random Forest/ # Baseline Random Forest training
-├── Logistic Regression/ # Logistic Regression implementation
-├── SVM/ # LinearSVC + calibrated OOF pipeline
-├── Neural_Nets/ # MLP / Neural Network experiments
-├── Ensemble Models/ # Soup / stacking scripts
-├── requirements.txt # Dependencies
-└── README.md # This file
+├── data/                       # Raw and processed data
+├── XGBoost/                    # XGBoost training scripts & configs
+├── LightGBM/                   # LightGBM experiments
+├── CatBoost/                   # CatBoost experiments & ensemble files
+├── Random Forest/              # Baseline Random Forest training
+├── Logistic Regression/        # Logistic Regression implementation
+├── SVM/                        # LinearSVC + calibrated OOF pipeline
+├── Neural_Nets/                # MLP / Neural Network experiments
+├── Ensemble Models/            # Soup / stacking scripts
+├── requirements.txt            # Dependencies
+└── README.md                   # This file
+
 
 
 ---
