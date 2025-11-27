@@ -1,16 +1,5 @@
 # Start-up Founder Retention Prediction 
 
-**Team Name:** Vector Space  
-**Team Members:**  
-- **Tanmay Kumar — IMT2023593**  
-- **Yash Anand — IMT2023624**  
-- **Rajan Samar — IMT2023616**  
-
-**GitHub Repository:**  
-https://github.com/Tan2006may/Start-up-Founder-Retention-Prediction
-
----
-
 ##  Project Overview
 
 This project predicts whether a startup founder will be **retained (1)** or **not retained (0)**.  
