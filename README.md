@@ -1,4 +1,4 @@
-# Start-up Founder Retention Prediction 🚀
+# Start-up Founder Retention Prediction 
 
 **Team Name:** Vector Space  
 **Team Members:**  
@@ -53,28 +53,28 @@ The workflow involves:
 
 ##  Preprocessing & Feature Engineering
 
-### ✔ Missing Values
+###  Missing Values
 - **Numerical:** median  
 - **Categorical:** mode  
 
-### ✔ Encoding
+###  Encoding
 - **Label Encoding:** high-cardinality categoricals  
 - **Frequency Encoding:** selected categorical features  
 - **One-Hot Encoding:** for LR, SVM, and NN  
 
-### ✔ Scaling
+###  Scaling
 - **StandardScaler** applied for LR, SVM, and NN  
 - Tree-based models use **unscaled** data  
 
-### ✔ Feature Selection
+###  Feature Selection
 - Mutual information ranking  
 - XGBoost feature importances  
 - Final selected subsets: **Top-75 / Top-78** features  
 
-### ✔ Train/Validation Split
+###  Train/Validation Split
 - **80/20 stratified split** on target label  
 
-### ✔ F1-Optimized Threshold Tuning
+###  F1-Optimized Threshold Tuning
 - Threshold sweep on validation probabilities  
 - Crucial for LR, SVM, NN, XGBoost  
 
