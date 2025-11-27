@@ -31,7 +31,7 @@ The workflow involves:
 
 ---
 
-## 🧰 Repository Structure
+##  Repository Structure
 ├── data/ # Raw and processed data
 ├── XGBoost/ # XGBoost training scripts & configs
 ├── LightGBM/ # LightGBM experiments
@@ -76,7 +76,7 @@ The workflow involves:
 
 ---
 
-## ⚙️ Models & Performance Summary
+## Models & Performance Summary
 
 | Model | Preprocessing | F1 (Validation) | Notes |
 |-------|--------------|-----------------|-------|
@@ -90,23 +90,23 @@ The workflow involves:
 
 ---
 
-## 🍲 Final Ensemble — Model Soup
+##  Final Ensemble — Model Soup
 
 Rather than choosing a single model, we improved performance by averaging probability outputs from **three strong models**:
 
-### ✔ Files used in soup:
+###  Files used in soup:
 - `submission_all_fe_final.csv`  
 - `submission_catboost_ensemble.csv`  
 - `submission_catboost_ensemble_fe_K_fold_te.csv`  
 
-### ✔ How the Soup Works
+###  How the Soup Works
 1. Load all submission CSVs  
 2. Convert predictions to probability matrices  
 3. Align rows by `founder_id`  
 4. Compute weighted average:
    P_final = (P1 + P2 + P3) / 3
 
-### ✔ Final Performance
+###  Final Performance
 
 Final predicted class = argmax of `P_final`
    F1 Score = 0.752
