@@ -1,119 +1,144 @@
 
 This script performs:
-- Data loading  
-- Preprocessing  
-- Feature engineering  
-- Training an XGBoost model  
-- Validation and F1 scoring  
-- Threshold tuning  
-- Test-set inference  
-- Saving the final predictions  
+- Data loading
+- Cleaning & preprocessing
+- Feature engineering
+- Training **XGBoost on full data**
+- Training **SVM and Neural Network (NN) on 20% data** (required rule)
+- Evaluation using F1-score
+- Threshold tuning
+- Generating test predictions
 
 ---
 
-## 1. File: `model_fe_xgb.py`
-The script implements the complete ML pipeline:
+## 2. Dataset Description
+- `train.csv` — labelled training data  
+- `test.csv` — unlabelled test data  
 
-### **✔ Data Loading**
-Reads:
-- `train.csv`
-- `test.csv`
+### Types of features:
+- **Numerical features**: counts, activity metrics, business metrics  
+- **Categorical features**: founder type, region, plan, industry  
+- **Date features** (if present): converted to numeric offsets  
 
-Ensures:
-- correct dtypes  
-- categorical → string  
-- missing value handling  
+### Target:
 
 ---
 
-## 2. Feature Engineering
-This code applies **strong feature engineering**, which is why XGBoost performs best.
+## 3. Preprocessing
+The script handles:
+- Missing numerical values → median  
+- Missing categorical values → mode  
+- Type corrections for categorical columns  
+- Removal or merging of rare labels (if needed)  
+- Consistent train–test feature alignment  
 
-### **Included techniques:**
-#### **2.1 Frequency Encoding**
-High-cardinality categorical features are converted into frequency/count features.  
-This is essential because:
-- XGBoost performs best with dense numeric inputs  
-- One-hot creates extremely sparse high-dimensional matrices  
-- Frequency encoding captures category importance without explosion of dimensions
+---
 
-#### **2.2 One-Hot Encoding**  
-Used only for low-cardinality columns.
+## 4. Feature Engineering
+The strongest part of the pipeline. Includes:
 
-#### **2.3 Date Features**
-The script extracts:
-- day  
+### 4.1 Frequency Encoding  
+Used for **high-cardinality** categorical columns.  
+Produces dense numeric features ideal for tree-based models (XGBoost).
+
+### 4.2 One-Hot Encoding  
+Used for **low-cardinality** categorical features.
+
+### 4.3 Date Feature Extraction  
+If dates exist in the dataset:
 - month  
-- difference between dates  
-- activity duration  
+- day-of-week  
+- days-difference  
 - recency features  
 
-These dramatically help tree models.
-
-#### **2.4 Numerical Transformations**
-- missing value imputation  
-- log transforms (if applied in script)  
-- scaling (only for diagnostics, XGB uses raw values)  
+### 4.4 Numerical Transformations  
+- Median imputation  
+- Optional log transforms  
+- Scaling **only for NN/SVM**, not for XGB  
 
 ---
 
-## 3. Model: XGBoost (XGBClassifier)
-The code trains XGBoost using tuned hyperparameters such as:
+## 5. Models Trained in This Project
+
+### 5.1 XGBoost (Final Selected Model)
+Trained on **full training data**.
+
+Why full data?
+- XGBoost scales well  
+- Handles all engineered features  
+- Best generalization  
+- Best F1-score  
+
+Hyperparameters include:
+- `n_estimators`
 - `learning_rate`
 - `max_depth`
 - `subsample`
 - `colsample_bytree`
-- `n_estimators`
-- `scale_pos_weight` (if used)
-- `gamma`, `min_child_weight`
-
-The model is trained on the engineered dataset and evaluated using:
-- **Validation F1 score**
-- **Threshold-tuned decision boundary** (important for imbalanced data)
+- Regularization parameters (`gamma`, `lambda`, etc.)
 
 ---
 
-## 4. Why XGBoost is the Best Model
-XGBoost consistently becomes the top-performing model **because the feature engineering used in this project aligns perfectly with how XGBoost learns**.
+## 5.2 SVM (Support Vector Machine)
+Per project rule:
 
-### **XGBoost strengths that match this project’s data:**
+> **SVM must be trained only on 20% of the dataset.**
 
-#### **✔ Works extremely well with frequency-encoded categorical features**
-Logistic Regression and NN cannot exploit frequency-encoded categorical values well.  
-XGB uses splits on these values → stronger decision boundaries.
+Pipeline:
+- 20% stratified train subset  
+- Scaled numerical features  
+- Frequency-encoded categorical features  
 
-#### **✔ Naturally handles non-linear interactions**
-The dataset includes:
-- behavioural patterns  
-- time-based relationships  
-- industry/region interactions  
+Limitations:
+- High dimensionality  
+- Hard to tune  
+- Only 20% data → weaker learning  
 
-Only gradient-boosted trees can model these automatically.
-
-#### **✔ Tolerant to missing values**
-XGB learns optimal “missing” directions during tree growth.
-
-#### **✔ Does not require scaling**
-Mixed-scale features (counts, amounts, encoded categories) work directly.
-
-#### **✔ High interpretability via feature importance**
-The code outputs importance plots / values showing which engineered features matter.
-
-### **Empirical reason (from your experiments):**
-Your pipeline showed:
-- Logistic Regression: ~0.74  
-- LightGBM: sometimes ~0.74  
-- CatBoost: inconsistent + slower  
-- NN/SVM: unstable & low F1  
-- **XGBoost: ~0.747 (BEST)**
-
-This is because your engineered features (freq encoding + date deltas + aggregated stats)
-match XGBoost’s boosting structure perfectly.
-
-**Hence XGBoost generalizes better and gives the highest F1 score.**
+Result:
+- Lower F1 than XGBoost
 
 ---
 
-## 5. Running the Script
+## 5.3 Neural Network (NN)
+Also trained on **20% data** as required.
 
-### **Install dependencies**
+Pipeline:
+- StandardScaler  
+- Dense MLP layers (hidden_sizes set in script)  
+- Adam optimizer  
+
+Limitations:
+- Needs more data than allowed (but restricted to 20%)  
+- Sensitive to hyperparameters  
+- Underperforms XGB on this dataset  
+
+Result:
+- Lower F1 than XGBoost
+
+---
+
+## 6. Why XGBoost Became the Best Model
+
+### ✔ Works perfectly with frequency-encoded features  
+XGBoost learns splits over frequency values, capturing category importance better than SVM/NN.
+
+### ✔ Handles non-linear interactions  
+Retention behaviour depends on complex combinations of:
+- region × activity  
+- founder_type × subscription  
+- business size × engagement  
+
+XGB models these automatically.
+
+### ✔ Robust to mixed feature types  
+XGB doesn’t need standardized input and handles missing values internally.
+
+### ✔ Uses the full dataset  
+Unlike NN/SVM (restricted to 20%), XGB uses **100% of training data**, giving it a fundamental statistical advantage.
+
+### ✔ Highest empirical F1-score  
+From experiments:
+- NN: lower  
+- SVM: lower  
+- LightGBM / RF: inconsistent  
+- **XGBoost: best (~0.747 F1)**  
