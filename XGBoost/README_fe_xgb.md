@@ -12,16 +12,14 @@
    - RandomForest  
    - **XGBoost**  
    - LightGBM / CatBoost (if installed)
-6. **Trains SVM and Neural Network on only 20% of data (project rule)**
-7. Evaluates all models using F1-score
-8. Picks best model (usually XGBoost)
-9. Generates `submission_all_fe_xgb.csv`
+6. Evaluates all models using F1-score
+7. Picks best model (usually XGBoost)
+8. Generates `submission_all_fe_xgb.csv`
 
 ## Why XGBoost wins
 - Handles frequency-encoded categorical features extremely well  
 - Learns non-linear interactions from engineered ratios, logs, and binning  
-- Robust to missing values and mixed feature types  
-- Uses **full dataset** (NN/SVM restricted to 20%)  
+- Robust to missing values and mixed feature types 
 - Consistently achieves the highest F1-score
 
 
