@@ -23,7 +23,7 @@ The workflow involves:
 ##  Repository Structure
 
 
-├── data/                       # Raw and processed data
+├── data                       # Raw and processed data
 ├── XGBoost/                    # XGBoost training scripts & configs
 ├── LightGBM/                   # LightGBM experiments
 ├── CatBoost/                   # CatBoost experiments & ensemble files
